@@ -530,3 +530,134 @@ case 6, 7:
 }
 ```
 
+## day06
+
+### 1.for循环
+
+**for 初始化;判断条件;迭代{}**
+
+```go
+//从1加到100
+var sum int
+for i := 1; i <= 100; i++ {
+	sum = sum + i
+	//sum += i
+}
+fmt.Println(sum)
+```
+
+for死循环三种写法
+
+```go
+//判断条件直接定义为true，i不参与判断
+for i := 1; true; i++ {
+	fmt.Println(time.Now())
+	time.Sleep(time.Second)
+}
+```
+
+```go
+//i不参与条件判断，所以不需要定义i
+for true {
+	fmt.Println(time.Now())
+	time.Sleep(time.Second)
+
+```
+
+```go
+//最后简化版本
+for {
+	fmt.Println(time.Now())
+	time.Sleep(time.Second)
+}
+```
+
+**for循环实现while逻辑**，先判断再执行
+
+```go
+var sum int
+var i int = 1
+for i <= 100 {
+	sum += i
+	i++
+}
+fmt.Println(sum)
+```
+
+do while模式，先执行再判断
+
+```go
+var sum int
+var i int = 1
+for{
+	sum += i
+	i++
+	if i>100 {
+	break
+	}
+}
+fmp.Println(sum)
+```
+
+**遍历数组切片Map**
+
+遍历数组
+
+```go
+var List [3]string = [3]string{"hello", "world", "!"}
+for i := 0; i < len(List); i++ {
+	fmt.Println(i, List[i])
+}
+```
+
+遍历切片使用
+
+```go
+//常规for遍历
+var ageList []int = []int{12,13,14,15}
+for i:=0;i<len(ageList);i++{
+    fmt.Println(i,ageList[i])
+}
+//for range
+var nameList []string = []string{"hello","world","!"}
+for index,item := range nameList{
+	fmt.Println(index,item)
+}
+```
+
+使用for range的方式**遍历Map**
+
+```go
+var nameMap map[int]string = map[int]string{1001:"alen",2003:"tom",3:"jack"}
+for key,value := range nameMap{
+    fmt.Println(key,value)
+}
+```
+
+break:跳出循环体
+
+```go
+//打印1-10
+for i := 1; i <= 10; i++ {
+	if i == 5 {
+		break
+	}
+	fmt.Printf("第%d次循环\t", i)
+}
+================================
+第1次循环	第2次循环	第3次循环	第4次循环	
+```
+
+continue：跳出本次循环，不再执行本次循环的剩余部分内容
+
+```go
+//打印1-10
+for i := 1; i <= 10; i++ {
+	if i == 5 {
+		//break
+		continue
+	}
+	fmt.Printf("第%d次循环\t", i)
+}
+```
+
