@@ -87,20 +87,20 @@ func main() {
 println，自带换行
 
 ```go
-	fmt.Println("println 自带换行")
+fmt.Println("println 自带换行")
 ```
 
 print，不会换行
 
 ```go
-	fmt.Print("没有换行")
+fmt.Print("没有换行")
 ```
 
 printf，格式化输出
 
 ```go
-	fmt.Printf("%s格式化输出%s\n", name)       //该输出语句会有一个missing,因为第二个%s没有值
-	fmt.Printf("%s格式化输出%s\n", name, "你好") //"你好"这个字符串传给了第二个%s
+fmt.Printf("%s格式化输出%s\n", name)       //该输出语句会有一个missing,因为第二个%s没有值
+fmt.Printf("%s格式化输出%s\n", name, "你好") //"你好"这个字符串传给了第二个%s
 ```
 
 **格式化输出**
@@ -114,14 +114,14 @@ printf，格式化输出
 %v：输出值，对控制不友好，%#v会加上双引号，输出控制较为友好
 
 ```go
-	fmt.Printf("%s格式化输出%s\n", name)       //该输出语句会有一个missing,因为第二个%s没有值
-	fmt.Printf("%s格式化输出%s\n", name, "你好") //"你好"这个字符串传给了第二个%s
-	fmt.Printf("这是整数类型%d \n", 3)
-	fmt.Printf("这是浮点数类型%.4f \n", 3.1415926)
-	fmt.Printf("这是字符串类型%s \n", "hello")
-	fmt.Printf("打印变量的类型%T %T \n", "hello", 1)
-	fmt.Printf("打印值：%v \n", "")
-	fmt.Printf("打印值：%#v \n", "")
+fmt.Printf("%s格式化输出%s\n", name)       //该输出语句会有一个missing,因为第二个%s没有值
+fmt.Printf("%s格式化输出%s\n", name, "你好") //"你好"这个字符串传给了第二个%s
+fmt.Printf("这是整数类型%d \n", 3)
+fmt.Printf("这是浮点数类型%.4f \n", 3.1415926)
+fmt.Printf("这是字符串类型%s \n", "hello")
+fmt.Printf("打印变量的类型%T %T \n", "hello", 1)
+fmt.Printf("打印值：%v \n", "")
+fmt.Printf("打印值：%#v \n", "")
 ```
 
 **输入**
@@ -129,18 +129,18 @@ printf，格式化输出
 从控制台输出并传入给变量
 
 ```go
-	var name1 string
-	fmt.Print("请输入你的名称：")
-	fmt.Scan(&name1)
+var name1 string
+fmt.Print("请输入你的名称：")
+fmt.Scan(&name1)
 ```
 
 输入的值和变量类型不一致时，会有错误信息，例如下方，age需要输入int类型，在控制台输入alen时，会输出
 
 ```go
-	var age int //age为int类型
-	fmt.Print("请输入你的年龄：")
-	n, err := fmt.Scan(&age)   //n err是Scan自带的
-	fmt.Println(n, err, age)
+var age int //age为int类型
+fmt.Print("请输入你的年龄：")
+n, err := fmt.Scan(&age)   //n err是Scan自带的
+fmt.Println(n, err, age)
 ==================
 //age需要输入int类型，在控制台输入alen时，会输出以下内容
 请输入你的年龄：alen
@@ -153,15 +153,15 @@ printf，格式化输出
 
 ```go
 //uint8表示无符号位，存正整数
-	var u8 uint8 = 255 //存无符号位的正整数
-	// 0 0 0 0 0 0 0 0 = 2^8-1 = 255
+var u8 uint8 = 255 //存无符号位的正整数
+// 0 0 0 0 0 0 0 0 = 2^8-1 = 255
 ```
 
 ```go
 //int8表示第一位为符号位，存整数
-	var a1 int8 = -127
-	// 0   0 0 0 0 0 0 0
-	//第一位表示符号
+var a1 int8 = -127
+// 0   0 0 0 0 0 0 0
+//第一位表示符号
 ```
 
 **浮点**
@@ -169,9 +169,9 @@ printf，格式化输出
 float32和float64表示，多少位的小数，无声明时，默认为float64
 
 ```go
-	var f1 float32 = 1.1
-	var f2 float64 = 1.2
-	fmt.Println(f1, f2)
+var f1 float32 = 1.1
+var f2 float64 = 1.2
+fmt.Println(f1, f2)
 ```
 
 **字符类型**
@@ -179,18 +179,18 @@ float32和float64表示，多少位的小数，无声明时，默认为float64
 byte：值范围与uint8一致，ASCII码中的值
 
 ```go
-	var c1 byte = 'a'
-	var c2 int8 = 97
-	fmt.Printf("%d,%c", c1, c2)
+var c1 byte = 'a'
+var c2 int8 = 97
+fmt.Printf("%d,%c", c1, c2)
 //'a'在ASCII码中的值为97，%c将c2的97转为了'a'
 ```
 
 rune：取值范围和uint32,中日韩等字符
 
 ```go
-	var c3 rune = '傻'
-	var c4 int32 = 20667
-	fmt.Printf("%d,%c\n", c3, c4)
+var c3 rune = '傻'
+var c4 int32 = 20667
+fmt.Printf("%d,%c\n", c3, c4)
 ```
 
 字符串，双引号括起来
@@ -198,9 +198,9 @@ rune：取值范围和uint32,中日韩等字符
 **转义字符**
 
 ```go
-	fmt.Println("制表符1\t制表符2")
-	fmt.Println("\"转义\"")
-	fmt.Println(`hello
+fmt.Println("制表符1\t制表符2")
+fmt.Println("\"转义\"")
+fmt.Println(`hello
 word
 ,,,
 
@@ -218,9 +218,9 @@ word
 值为true和false，默认值为false，无法做类型转换
 
 ```go
-	var b1 bool = true
-	var b2 bool = false
-	fmt.Println(b1, b2)
+var b1 bool = true
+var b2 bool = false
+fmt.Println(b1, b2)
 ```
 
 **零值问题**
@@ -228,12 +228,12 @@ word
 基本变量类型 定义时不赋值时，默认值为0、空、false……
 
 ```go
-	var q int
-	var w float32
-	var e string
-	var r rune
-	var t bool
-	fmt.Println(w, q, w, e, r, t)
+var q int
+var w float32
+var e string
+var r rune
+var t bool
+fmt.Println(w, q, w, e, r, t)
 //   0 0 0  0 false
 ```
 
@@ -246,34 +246,34 @@ word
 定义一个长度为3，字符类型为string的数组，并给每个元素赋值
 
 ```go
-	var nameList [3]string = [3]string{"alen", "jack", "tom"}
+var nameList [3]string = [3]string{"alen", "jack", "tom"}
 ```
 
 也可以先定义再赋值
 
 ```go
-	var nameList2 [3]int
-	nameList2 = [3]int{21, 22, 23}
+var nameList2 [3]int
+nameList2 = [3]int{21, 22, 23}
 ```
 
 修改某个元素的值
 
 ```go
-	nameList[0] = "tim"
-	fmt.Println(nameList)
+nameList[0] = "tim"
+fmt.Println(nameList)
 ```
 
 数组的第一个元素的索引为0，从左往右数，查看数组中某个元素的值时，使用变量名[索引]几个查看到第‘索引+1’位置元素的值，例如查看第1个元素的值为
 
 ```go
-	fmt.Println(nameList[0])
+fmt.Println(nameList[0])
 ```
 
 不论数组有多长，查看最后一个元素的值
 
 ```go
-	//len(nameList)，会输出nameList的长度
-	fmt.Println(nameList[len(nameList)-1])
+//len(nameList)，会输出nameList的长度
+fmt.Println(nameList[len(nameList)-1])
 ```
 
 ### 2.切片
@@ -283,23 +283,23 @@ word
 定义一个长度为空的数组，即为切片，定义时赋值。
 
 ```go
-	var nameList []string = []string{"tom", "tim", "alen"}
+var nameList []string = []string{"tom", "tim", "alen"}
 ```
 
 先定义再赋值
 
 ```go
-	var ageList []int
-	ageList = []int{10, 20, 30}
+var ageList []int
+ageList = []int{10, 20, 30}
 ```
 
 直接打印空切片会报错
 
 ```go
-	var sexList []string
-	fmt.Println(sexList)	//打印整个数组会输出[]
-	fmt.Println(sexList[0])	//打印第1个元素时，会报错
-	fmt.Println(sexList == nil)	//结果为true
+var sexList []string
+fmt.Println(sexList)	//打印整个数组会输出[]
+fmt.Println(sexList[0])	//打印第1个元素时，会报错
+fmt.Println(sexList == nil)	//结果为true
 ```
 
 通常在定义一个切片的时候需要初始化一下，有以下几种方式
@@ -307,8 +307,8 @@ word
 定义切片时，初始化一下
 
 ```go
-	var nameList1 []string = []string{}
-	fmt.Println(nameList1 == nil)
+var nameList1 []string = []string{}
+fmt.Println(nameList1 == nil)
 
 =====================
 false//表示该切片不为空
@@ -317,8 +317,8 @@ false//表示该切片不为空
 使用**make函数**，make(元素类型,长度)
 
 ```go
-	nameList2 := make([]string, 0)
-	fmt.Println(nameList2 == nil)
+nameList2 := make([]string, 0)
+fmt.Println(nameList2 == nil)
 =====================
 false
 ```
@@ -326,8 +326,8 @@ false
 创建一个全是0的切片
 
 ```go
-	ageList2 := make([]int,3)
-	fmt.Println(ageList2)
+ageList2 := make([]int,3)
+fmt.Println(ageList2)
 ```
 
 切片增加一个元素使用append方法
@@ -340,9 +340,9 @@ ageList3 = append(ageList3,7)
 定义一个数组，有五个元素，切出从第几个到第几个的元素
 
 ```go
-	array := [5]string{"tom", "tim", "alen", "jack", "jim"}
-	slices := array[3:5]
-	fmt.Println(slices)
+array := [5]string{"tom", "tim", "alen", "jack", "jim"}
+slices := array[3:5]
+fmt.Println(slices)
 //array可以看成{🔪"tom", 🔪"tim", 🔪"alen",🔪"jack", 🔪"jim"🔪}，从第一个元素的左边开始切一刀，直到切到最后一个元素的右边。取某一串值可以在[开始🔪:结束🔪]，第一个位置的🔪索引为0。
 //所以，我想要得到alen到jim的值为：alen左边的🔪到jim右边的🔪的索引号。
 ```
@@ -350,12 +350,12 @@ ageList3 = append(ageList3,7)
 **切片排序**
 
 ```go
-	ints := []int{231, 234, 25, 12}
-	fmt.Println(ints) //原封不动输出
-	sort.Ints(ints)   //升序
-	fmt.Println(ints)
-	sort.Sort(sort.Reverse(sort.IntSlice(ints))) //降序
-	fmt.Println(ints)
+ints := []int{231, 234, 25, 12}
+fmt.Println(ints) //原封不动输出
+sort.Ints(ints)   //升序
+fmt.Println(ints)
+sort.Sort(sort.Reverse(sort.IntSlice(ints))) //降序
+fmt.Println(ints)
 ```
 
 ## day04
@@ -366,41 +366,41 @@ map，定义后需要初始化
 
 ```go
 //定义并初始化
-	var userMap map[int]string = map[int]string{
-		1: "alen",
-		2: "jack",
-		3: "",
-	}
-	fmt.Println(userMap) //打印map
+var userMap map[int]string = map[int]string{
+	1: "alen",
+	2: "jack",
+	3: "",
+}
+fmt.Println(userMap) //打印map
 ```
 
 使用make函数初始化
 
 ```go
-	var ageMap map[string]int = make(map[string]int)
-	ageMap["alen"] = 18
-	fmt.Println(ageMap)
+var ageMap map[string]int = make(map[string]int)
+ageMap["alen"] = 18
+fmt.Println(ageMap)
 ```
 
 增加一个key、value
 
 ```
-	userMap[4] = "tom"
-	fmt.Println(userMap)
+userMap[4] = "tom"
+fmt.Println(userMap)
 ```
 
 将key为1的value修改为hello
 
 ```go
-	userMap[1] = "hello"
+userMap[1] = "hello"
 ```
 
 当没有key为5的时候，可以使用该方法查看
 
 ```go
-	fmt.Printf("%#v\n", userMap[5])
-	value, ok := userMap[5]
-	fmt.Println(value, ok)
+fmt.Printf("%#v\n", userMap[5])
+value, ok := userMap[5]
+fmt.Println(value, ok)
 =======================================
  false
 ```
@@ -408,8 +408,8 @@ map，定义后需要初始化
 当key为3的value为空值时使用上述方法返回为true
 
 ```go
-	value1, ok1 := userMap[3]
-	fmt.Println(value1, ok1)
+value1, ok1 := userMap[3]
+fmt.Println(value1, ok1)
 ```
 
 ### 2.if判断
@@ -417,62 +417,62 @@ map，定义后需要初始化
 中断式（推荐），只会走一个if判断
 
 ```go
-	//中断式
-	var age int
-	fmt.Println("请输入你的年龄：")
-	fmt.Scan(&age)
-	if age <= 0 {
-		fmt.Println("未出生")
-		return
-	}
-	if age <= 18 {
-		fmt.Println("未成年")
-		return
-	}
-	if age <= 35 {
-		fmt.Println("中年")
-		return
-	}
+//中断式
+var age int
+fmt.Println("请输入你的年龄：")
+fmt.Scan(&age)
+if age <= 0 {
+	fmt.Println("未出生")
+	return
+}
+if age <= 18 {
+	fmt.Println("未成年")
+	return
+}
+if age <= 35 {
+	fmt.Println("中年")
+	return
+}
 ```
 
 嵌入式，先用一个判断条件将几个条件分为两部分，在从某一部分中进行逐一判断
 
 ```go
-	if age <= 18 {
-		if age <= 0 {
-			fmt.Println("未出生")
-		} else {
-			fmt.Println("未成年")
-		}
+if age <= 18 {
+	if age <= 0 {
+		fmt.Println("未出生")
 	} else {
-		if age <= 35 {
-			fmt.Println("青年")
-		} else {
-			fmt.Println("中年")
-		}
+		fmt.Println("未成年")
 	}
+} else {
+	if age <= 35 {
+		fmt.Println("青年")
+	} else {
+		fmt.Println("中年")
+	}
+}
 ```
 
 多条件判断式
 
 ```go
-	//多条件判断式
-	var age int
-	fmt.Println("请输入你的年龄")
-	fmt.Scan(&age)
+//多条件判断式
+var age int
+fmt.Println("请输入你的年龄")
+fmt.Scan(&age)
 
-	if age <= 0 {
-		fmt.Println("未出生")
-	}
-	if age > 0 && age <= 18 {
-		fmt.Println("未成年")
-	}
-	if age > 18 && age < 35 {
-		fmt.Println("青年")
-	}
-	if age >= 35 {
-		fmt.Println("中年")
-	}
+if age <= 0 {
+	fmt.Println("未出生")
+}
+if age > 0 && age <= 18 {
+	fmt.Println("未成年")
+}
+if age > 18 && age < 35 {
+	fmt.Println("青年")
+}
+if age >= 35 {
+	fmt.Println("中年")
+}
 ```
 
 ## day05
@@ -500,17 +500,17 @@ default:
 当匹配一个值还想继续往下走时，在那个case最后一个语句下加上`fallthrough`
 
 ```go
-	switch {
-	case age <= 0:
-		fmt.Println("未出生")
-	case age <= 18:
-		fmt.Println("未成年")
-		fallthrough
-	case age <= 35:
-		fmt.Println("青年")
-	default:
-		fmt.Println("中年")
-	}
+switch {
+case age <= 0:
+	fmt.Println("未出生")
+case age <= 18:
+	fmt.Println("未成年")
+	fallthrough
+case age <= 35:
+	fmt.Println("青年")
+default:
+	fmt.Println("中年")
+}
 ===============
 请输入你的年龄：15
 未成年
@@ -658,6 +658,123 @@ for i := 1; i <= 10; i++ {
 		continue
 	}
 	fmt.Printf("第%d次循环\t", i)
+}
+```
+
+### 2.函数
+
+简单的函数，没有不需要传参
+
+```go
+func sayHello() {
+	fmt.Printf("Hello World")
+}
+func main() {
+	sayHello()
+}
+```
+
+传递参数给函数，传参类型为int型
+
+```go
+func param1(id int) {
+	fmt.Println(id)
+}
+func main() {
+	param1(3)
+}
+```
+
+传递两个参数，并且两个参数的变量类型都为int
+
+```go
+func param2(id, age int) {
+	fmt.Println(id, age)
+}
+func main() {
+	param2(3, 4)
+```
+
+传递两个不同的参数，分别为int和string
+
+```go
+func param3(id int, name string) {
+	fmt.Println(id, name)
+}
+func main() {
+	param3(14, "alen")
+}
+```
+
+定义一个函数，将传参的值相加求和
+
+```go
+func addNum(numberList ...int){
+    var sum int
+    for _,item := range numberList{
+        sum += item
+    }
+    fmt.Println(sum)
+}
+func main() {
+	addNum(1, 2, 3, 4, 5)
+}
+```
+
+返回值
+
+一个返回值
+
+```go
+func r1(getName string) string{
+    return getName
+}
+```
+
+两个返回值
+
+```go
+func r2(nameList ...int)(ium int,sum int){
+    for ium,sum := range(nameList){
+        ium +=1
+        sum += sum  
+    }
+    return ium,sum
+}
+```
+
+定义一个函数，输入一个切片，返回元素的个数和切片的和
+
+```go
+func r2(getList []int) (indexSum, itemSum int) {
+	for index, item := range getList {
+		indexSum = index + 1
+		itemSum += item
+	}
+	return indexSum, itemSum
+}
+func main() {
+	var nameList []int = []int{1, 2, 3, 4}
+	fmt.Println(r2(nameList))
+    //	
+    index, sum := r2(nameList)
+	fmt.Println(index, sum)
+}
+=================================
+4 10
+```
+
+return后不加返回值和变量时，默认返回定义函数时返回的变量
+
+```go
+func r4() (val string, ok bool) {
+	if 1 < 2 {
+		val = "11"
+	}
+	return
+}
+func main() {
+	fmt.Println(r4())
 }
 ```
 
