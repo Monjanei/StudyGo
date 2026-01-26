@@ -778,3 +778,134 @@ func main() {
 }
 ```
 
+## day07
+
+### 1.匿名函数
+
+在一个函数内定义一个函数，直接定义是不允许的，可以使用定义一个变量的方式定义一个函数，变量的类型是函数类型
+
+定义一个匿名函数，使用return返回值
+
+```go
+func main(){
+    var addSum = func () string{
+        return "alen1"
+    }
+    fmt.Println(addSum())
+}
+```
+
+定义一个函数，传一个name值传入函数
+
+```go
+func main(){
+    var SetName = func (name string){
+        fmt.Println(name)
+    }
+    SetName("alen2")
+}
+```
+
+### 2.高阶函数
+
+定义一个Map存放每个选项，1 登录、2 注册、3 用户中心，每个Map的key是选项，value是对于操作的函数
+
+```go
+import "fmt"
+
+func main() {
+	fmt.Println("请输入你要进行的操作")
+	fmt.Println("1.登录")
+	fmt.Println("2.注册")
+	fmt.Println("3.个人中心")
+	//定义一个变量接受用户输入的值
+	var index int
+	fmt.Scan(&index)
+
+	//定义一个map，key为选项==index，value为所对应的函数操作
+	var menu = map[int]func(){
+		1: login,
+		2: register,
+		3: userCenter,
+	}
+	//将menu这个map的value赋值给fun
+	fun, ok := menu[index]
+	//如果这个key不存在ok为false，如果值存在，ok为true
+	if ok {
+		fun()
+	}
+
+}
+
+func login() {
+	fmt.Println("登录")
+}
+func register() {
+	fmt.Println("注册")
+}
+func userCenter() {
+	fmt.Println("用户中心")
+}
+
+```
+
+**闭包**
+
+一个函数的返回值也是一个函数，在内层的函数用到了外层的函数称为**闭包**
+
+定义一个函数，func(2)(1,2,3)，实现效果为等待2s后将后面的括号内的参数求和
+
+定义的函数addAwait的返回值也是一个函数，
+
+```go
+func addAwait(sec int) func() int{
+    return func(nameList ...int) int{
+        time.Sleep(time.Duration(sec) * time.Second)
+        var sum int
+        for _,i := range nameList{
+            sum += i
+        }
+        return sum
+    }
+    
+}
+func main(){
+    
+}
+```
+
+### 3.指针
+
+**值传递**：直接传递值给函数会重新开辟一个新的地址
+
+```go
+func Copy(fname string) {
+	fmt.Printf("%p\n", &fname)
+
+}
+
+func main() {
+
+	var name string = "alen"
+	Copy(name)
+	fmt.Printf("%p\n", &name)
+}
+```
+
+**引用传递**
+
+```go
+func copy(fname *string) { //定义一个函数，他的参数为引用类型 *表示，表示他要接受的值是一个内存地址
+	fmt.Println(fname) //此时fname存的值是name的内存地址
+	*fname = "tom"     //修改 fname 指针指向的内存中的值，因为fname和name指向同一个内存地址的值，所以修改这个值为tom，name的值也会修改为tom
+}
+
+func main() {
+	var name string = "alen"
+	fmt.Printf("%p,%v\n", &name, name) //将name的内存地址打印
+	copy(&name)                        //将变量name的内存地址的值传给函数
+	fmt.Printf("%p,%v\n", &name, name) //将name的内存地址打印
+
+}
+```
+
