@@ -909,3 +909,111 @@ func main() {
 }
 ```
 
+## day08
+
+### 1.init函数
+
+init函数在main函数之前执行，没有参数的输入和返回值
+
+```go
+func init() {
+	fmt.Println("init1")
+}
+func init() {
+	fmt.Println("init2")
+}
+func main() {
+	fmt.Println("main")
+}
+```
+
+### 2.defer函数
+
+在return前执行的函数，先进后出，离return越近的defer函数越先执行
+
+```go
+func main() {
+	defer func() {
+		fmt.Println("defer1")
+	}()
+	defer fmt.Println("defer2") 	//另外一种定义方式
+	return
+}
+===============================
+defer2
+defer1
+```
+
+其他代码执行完之后才会执行defer函数
+
+先定义name的值为alen，在defer函数后修改值为tom
+
+```go
+func main() {
+	var name string = "alen"
+	defer func() {
+		fmt.Println(name)
+	}()
+	name = "tom"
+	return
+}
+===============================
+tom
+```
+
+### 3.结构体
+
+定义一个结构体，并创建一个对象
+
+```go
+type Student struct {
+	Name string		//Student的成员Name为string类型
+	Age  int
+}
+func main() {
+	s1 := Student{Name: "alen", Age: 18}		//创建一个对象
+	fmt.Println(s1.Name)
+}
+```
+
+给结构体绑定一个方法
+
+```go
+func (s Student) Study() {		//Study是Student的一个方法
+	fmt.Printf("%s is studying", s.Name)
+}
+func main() {
+	s1 := Student{Name: "alen", Age: 18}
+	fmt.Println(s1.Name)
+	s1.Study()
+}
+```
+
+### 4.继承
+
+再定义一个Class班级的结构体，Student的成员中有Class，再添加一个显示Student的Class信息
+
+```go
+type Class struct { 	//定义一个Class结构体，含有Name一个成员
+	Name string
+}
+type Student struct {
+	Name string		//Student结构体中也含有一个Name成员
+	Age  int
+	Class
+}
+
+func (s Student) Info() {
+	fmt.Printf("%s今年%d岁班级在：%s\n", s.Name, s.Age, s.Class.Name)	//在此处同名需要先加上是哪个结构体
+}
+func (s Student) Study() {
+	fmt.Printf("%s 正在学习", s.Name)
+}
+
+func main() {
+	c1 := Class{Name: "三年级"}		//需要先给Class结构体创建一个对象，才能在下面赋值
+	s1 := Student{Name: "alen", Age: 14, Class: c1}
+	s1.Info()
+}
+```
+
