@@ -1017,3 +1017,119 @@ func main() {
 }
 ```
 
+## day09
+
+### 1.结构体指针
+
+在一个方法内修改结构体的某个成员的值，使用一下方式，是开辟了一个新的内存空间存放，原本的那个值未被修改
+
+```go
+func (s Student1) SetName(name string) {
+	s.Name = name
+}
+```
+
+可以给在方法定义的位置引用类型，如下
+
+```go
+func (s *Student1) SetName2(name string) {
+	s.Name = name
+}
+```
+
+完整的示例
+
+```go
+type Student1 struct {
+	Name string
+}
+
+func (s Student1) SetName(name string) {
+	s.Name = name
+}
+
+func (s *Student1) SetName2(name string) {
+	s.Name = name
+}
+
+func main() {
+	s1 := Student1{Name: "alen"}
+
+	s1.SetName("tom")
+	fmt.Println(s1.Name)
+	s1.SetName2("jack")
+	fmt.Println(s1.Name)
+}
+=====================================================
+alen		//值传递，未修改为tom
+jack		//引用传递，值被修改为了jack
+```
+
+### 2.结构体tag
+
+转json格式时，json的字段，类似于别名
+
+```go
+type User struct {
+	Name   string `json:"name"`			//表示转为json格式该字段为name
+	Age    int    `json:"age,omitempty"`//omitempty表示该值为默认值时，忽略该字段
+	Passwd string `json:"-"`		//表示直接忽略该字段
+}
+
+func (u User) Info() {
+	fmt.Println(u.Name, u.Age, u.Passwd)
+}
+
+func main() {
+	user := User{Name: "alen", Age: 1, Passwd: "123456"}
+	user.Info()
+	byteData, _ := json.Marshal(user)
+	fmt.Println(string(byteData))
+}
+```
+
+### 3.自定义数据类型
+
+没太看明白，大概意思如下?
+
+```go
+const (
+	SucessCode       Code = 0
+	CodeFailCode     Code = 1
+	NetworkFaildCode Code = 2
+)
+
+//定义了一个自定义数据类型Code
+type Code int
+
+//给Code绑定了一个getMsg的方法
+func (c Code) getMsg() string {
+	switch c {
+	case 0:
+		return "成功"
+	case 1:
+		return "代码错误"
+	case 2:
+		return "网络错误"
+	}
+	return ""
+}
+//有一个函数用来判断错误代码的错误信息
+func webServer(errorcode int) (code Code, msg string) {
+	if errorcode == 2 {
+		return NetworkFaildCode, CodeFailCode.getMsg()
+	}
+	if errorcode == 1 {
+		return CodeFailCode, CodeFailCode.getMsg()
+	}
+	if errorcode == 0 {
+		return SucessCode, SucessCode.getMsg()
+	}
+	return
+}
+func main() {
+	fmt.Println(webServer(2))
+}
+
+```
+
