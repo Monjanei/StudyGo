@@ -1133,3 +1133,145 @@ func main() {
 
 ```
 
+## day10
+
+### 1.类型别名
+
+两者的区别：
+
+**类型别名和自定义类型的赋值方式**
+
+```go
+//自定义数据类型
+type MyCode int
+
+//类型别名
+type MyAliasCode
+```
+
+**类型别名不能绑定方法**
+
+```go
+func (mc MyCode) Hello()      {}
+func (mc MyAliasCode) Hello() {}	//该行会报错
+```
+
+**类型别名的打印变量类型时还是原始类型**
+
+```go
+//定义自定义类型和类型别名的两个变量分别打印出来
+const (
+	mycode      MyCode      = 1
+	myAliasCode MyAliasCode = 2
+)
+
+func main() {
+	fmt.Printf("%v,%T\n", mycode, mycode)
+	fmt.Printf("%v,%T\n", myAliasCode, myAliasCode)
+
+}
+```
+
+自定义数据类型的数据类型与原始类型不一致，而Go中没有隐式转换，而类型别名可以直接与原始变量类型做判断
+
+```go
+var age int
+fmt.Scan(&age) //接受一个age的值
+//自定义类型的变量类型为MyCode，无法与int做比较
+if age == mycode {
+	fmt.Printf("no")
+}
+//可以将mycode变量的类型转为int型，或将age的类型转换为MyCode类型
+if age == int(mycode) { //或者是if MyCode(age) == mycode
+	fmt.Printf("yes")
+}
+//类型别名的变量类型还是int，所以可以直接和int对比较
+if age == myAliasCode {
+	fmt.Printf("ok")
+}
+```
+
+### 2.接口
+
+当两个对象有多个共同的方法时，定义一个接口纳管这些相同的方法
+
+```go
+//创建两个对象分别为Dog和Cat，两个对象都绑定两个方法：Sing、GetName
+type Dog struct {
+	Name string
+	Age  int
+}
+// 给Dog对象绑定一个Sing方法
+func (d Dog) Sing() {
+	fmt.Printf("%s：库里库里酷酷库里\n", d.Name)
+}
+// 给Dog对象绑定一个GetAge方法
+func (d Dog) GetAge() {
+	fmt.Println(d.Age)
+}
+// 定义一个Cat对象，有Name、Age、Sex三个属性
+type Cat struct {
+	Name string
+	Age  int
+	Sex  string
+}
+// 给Cat对象绑定一个Sing方法
+func (c Cat) Sing() {
+	fmt.Printf("%s 叮咚鸡叮咚鸡\n", c.Name)
+}
+// 给Cat对象绑定一个GetAge方法
+func (c Cat) GetAge() {
+	fmt.Println(c.Age)
+}
+```
+
+创建一个函数分别调用四个方法的话太过于臃肿，如果Dog和Cat的方法名、参数类型、返回值一样，则可以创建一个接口来“纳管”，如下
+
+```go
+type SingInterface interface {
+	Sing()		//将两个对象共有的方法类型写到这里
+	GetAge()
+}
+```
+
+```go
+func common(c SingInterface) {
+	c.Sing()
+	c.GetAge()
+}
+//这样使用d1的类型是Dog则会调用Dog.Sing，Cat则是Cat.Sing
+func main() {
+	d1 := Dog{Name: "旺财", Age: 18}
+	common(d1)
+	c1 := Cat{Name: "咪咪", Age: 17}
+	common(c1)
+}
+```
+
+一个接口下的两个方法必须是两个对象都有的方法，如果没有则无法使用该接口则会编译报错
+
+```go
+//给Cat增加一个GetSex的方法，Dog保持不变
+func (c Cat) GetSex() {
+	fmt.Println(c.Sex)
+}
+//接口添加方法
+type SingInterface interface {
+	Sing()
+	GetAge()
+	GetSex()
+}
+```
+
+```go
+func main() {
+    d1 := Dog{Name: "旺财", Age: 18}
+    common(d1)		//此处会报错：无法将 d1 (类型 Dog) 用作类型 SingInterface类型未实现 SingInterface，因为缺少某些方法:
+GetSex()
+    c1 := Cat{Name: "咪咪", Age: 17}
+    common(c1)
+}
+```
+
+### 3.类型断言
+
