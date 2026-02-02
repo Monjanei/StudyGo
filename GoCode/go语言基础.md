@@ -1273,5 +1273,158 @@ GetSex()
 }
 ```
 
-### 3.类型断言
+## day11
+
+### 1.类型断言
+
+在接口函数里去判断调用接口的对象是否为某个对象
+
+```go
+func common(c SingInterface) {
+	dog, isDog := c.(Dog)  //把传入对象值赋给dog，isDog，如果传入对象为Dog类型，则dog的值为Dog类型，isDog为true
+	if isDog {
+		dog.Sing()
+	} else {	//如果isDog为false，则只能获取到年龄
+		c.GetAge()
+	}
+}
+func main() {
+	d1 := Dog{Name: "旺财", Age: 18}
+	c1 := Cat{Name: "咪咪", Age: 17}
+    //分别传入Dog类型的d1，Cat类型的c1，由于接口函数的断言，所以只有Dog类型的值才能调用Sing方法，否则都只能调用GetAge方法
+	common(d1)
+	common(c1)
+}
+=====================================
+旺财：库里库里酷酷库里
+17
+```
+
+利用switch判断
+
+```go
+func common(c SingInterface) {
+    switch animals := c.(type){
+        case Dog:
+        fmt.println(animals)
+        case Cat:
+        fmt.println(animals)
+        default:
+        fmt.println("其他类型")
+    }
+}
+```
+
+### 2.空接口
+
+想要定义一个打印所有变量类型的函数
+
+先定义一个空接口,再定义一个函数来实现这个接口
+
+```go
+//方法1
+type EmptyInterface interface{}
+func dy(val EmptyInterface){
+
+}
+//方法2
+func dy(val interface{}){
+    fmt.Println(val)
+}
+//方法3
+func dy(val any){		//按住ctrl点击any，type any = interface{}，any是interface{}的类型别名
+    fmt.Println(val)
+}
+```
+
+```go
+func main() {
+    d1 := Dog{Name: "旺财", Age: 18}
+    dy(d1)
+    i1 := 1
+    dy(i1)
+    s1 := "你好"
+    dy(s1)
+    f1 := 0.32
+    dy(f1)
+}
+=====================================
+{旺财 18}
+1
+你好
+0.32
+```
+
+### 3.协程
+
+定义一个购物的函数，开始购物后需要等待1s才会结束购物，一共有3个人一起开始购物
+
+```go
+func shopping(name string) {
+	fmt.Printf("%s 开始购物\n", name)
+	time.Sleep(1 * time.Second)
+	fmt.Printf("%s 结束购物\n", name)
+}
+
+func main() {
+	starttime := time.Now()
+	shopping("alen")
+	shopping("tom")
+	shopping("jack")
+	fmt.Println(time.Since(starttime))
+}
+=========================================
+alen 开始购物
+alen 结束购物
+tom 开始购物
+tom 结束购物
+jack 开始购物
+jack 结束购物
+三人共花费： 3.0030175s
+```
+
+以上方式可以看到，程序是从上往下开始执行，每次执行shopping函数时，都需要进入函数内等待一秒钟，而想要得到的效果是，当前有三个人，我想要他们三个人一起开始购物，每个人的购物时长不一样，当最后一个人购物回来的时候，三个人购物完成。可以理解为主线是所有人完成购物，每个人作为一个支线（协程），看以下的案例
+
+```go
+func main() {
+	starttime := time.Now()
+	go shopping("alen")
+	go shopping("tom")
+	go shopping("jack")
+	fmt.Println("三人共花费：", time.Since(starttime))
+}
+========================================================
+alen 开始购物
+jack 开始购物
+tom 开始购物
+三人共花费： 0s
+```
+
+以上造成花费0s是由于，主线程并未等待协程执行完才结束，当执行到alen时，go起了个协程去执行相对于的代码，但此时，主线程继续往下走了，直接走完整个代码，这个时候需要等待所有协程完成才能结束
+
+```go
+func shopping(name string,wait *sync.WaitGroup) {
+	fmt.Printf("%s 开始购物\n", name)
+	var i int
+	if name == "tom" {
+		i = 2
+	} else {
+		i = 1
+	}
+	time.Sleep(time.Duration(i) * time.Second)
+	fmt.Printf("%s 结束购物\n", name)
+    wait,Done()
+}
+
+func main() {
+    var wait sync.WaitGroup
+    wait.Add(3)
+	starttime := time.Now()
+	go shopping("alen",&wait)
+	go shopping("tom",&wait)
+	go shopping("jack",&wait)
+	fmt.Println("三人共花费：", time.Since(starttime))
+    wait.Wait()
+}
+```
 

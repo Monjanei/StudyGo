@@ -2,6 +2,10 @@ package main
 
 import "fmt"
 
+func dy(val any) {
+	fmt.Println(val)
+}
+
 type SingInterface interface {
 	Sing()
 	GetAge()
@@ -46,12 +50,26 @@ func (c Cat) GetSex() {
 	fmt.Println(c.Sex)
 }
 func common(c SingInterface) {
-	c.Sing()
-	c.GetAge()
+	switch animals := c.(type) {
+	case Dog:
+		fmt.Println(animals)
+	case Cat:
+		fmt.Println(animals)
+	default:
+		fmt.Println("其他类型")
+	}
 }
 func main() {
 	d1 := Dog{Name: "旺财", Age: 18}
+	c1 := Cat{Name: "咪咪", Age: 17, Sex: "man"}
 	common(d1)
-	c1 := Cat{Name: "咪咪", Age: 17}
 	common(c1)
+	dy(d1)
+	dy(c1)
+	i1 := 1
+	s1 := "你好"
+	f1 := 0.32
+	dy(i1)
+	dy(s1)
+	dy(f1)
 }
