@@ -1428,3 +1428,50 @@ func main() {
 }
 ```
 
+## day12
+
+### 1.channel
+
+每个协程都会有一个产物，需要一个东西去接这个产物，例如每个人去买东西，买的物品价格不一样，购物完时需要统计花费的钱
+
+```go
+var moneyChan = make(chan int)
+
+func shopping(name string,money int, wait *sync.WaitGroup) {
+    fmt.Printf("%s 开始购物\n", name)
+    var i int
+    if name == "tom" {
+       i = 2
+    } else {
+       i = 1
+    }
+    time.Sleep(time.Duration(i) * time.Second)
+    fmt.Printf("%s 结束购物\n", name)
+    moneyChan<-money
+    wait.Done()
+}
+
+func main() {
+    var wait sync.WaitGroup
+    wait.Add(3)
+    startTime := time.Now()
+    go shopping("alen",3, &wait)
+    go shopping("tom", 5,&wait)
+    go shopping("jack",1, &wait)
+    go func(){
+       wait.Wait()
+        close(moneyChan)
+    }()
+    var moneyList []int
+    for {
+        money,ok := <-moneyChan
+        if !ok{
+            break
+        }
+        moneyList = append.(moneyList,money)
+    }
+    fmt.Println("三人共花费：", time.Since(startTime))
+    fmt.Println(moneyList)
+}
+```
+
