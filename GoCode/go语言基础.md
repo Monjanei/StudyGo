@@ -1413,7 +1413,7 @@ func shopping(name string,wait *sync.WaitGroup) {
 	}
 	time.Sleep(time.Duration(i) * time.Second)
 	fmt.Printf("%s 结束购物\n", name)
-    wait,Done()
+    wait.Done()
 }
 
 func main() {
@@ -1475,3 +1475,96 @@ func main() {
 }
 ```
 
+## day13
+
+### 1.select
+
+写多个channel的时候写法
+
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+var moneyChan1 = make(chan int)		//定义两个channel
+var nameChan1 = make(chan string)
+var doneChan = make(chan struct{})		//定义一个用于关闭channel的channel
+
+func send(name string, money int, wait *sync.WaitGroup) {
+    fmt.Printf("%s 开始购物\n", name)
+    time.Sleep(1 * time.Second)
+    fmt.Printf("%s 结束购物\n", name)
+
+    moneyChan1 <- money		//把money写到moneyChan1信道里
+    nameChan1 <- name		//把name写到nameChan1信道里
+    wait.Done()
+
+}
+
+func main() {
+    var wait sync.WaitGroup
+    startTime := time.Now()
+    wait.Add(3)
+    go send("alen", 10, &wait)
+    go send("tom", 10, &wait)
+    go send("jack", 10, &wait)
+
+    go func() {
+       defer close(moneyChan1)
+       defer close(nameChan1)
+       defer close(doneChan)
+       wait.Wait()
+    }()
+
+    var moneyList []int
+    var nameList []string
+
+    for {
+       select {
+       case money := <-moneyChan1:
+          moneyList = append(moneyList, money)
+       case name := <-nameChan1:
+          nameList = append(nameList, name)
+       case <-doneChan:
+          fmt.Println("购买完成", time.Since(startTime))
+          fmt.Println(moneyList)
+          fmt.Println(nameList)
+          return
+       }
+    }
+
+}
+```
+
+### 2.协助超时
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+var done = make(chan struct{})
+
+func event() {
+    fmt.Println("event start")
+    time.Sleep(3 * time.Second)
+    fmt.Println("event done")
+    close(done)
+}
+func main() {
+    go event()
+    select {
+    case <-done:
+       fmt.Println("event执行完成")
+    case <-time.After(2 * time.Second):
+       fmt.Println("event执行超时")
+    }
+}
+```
