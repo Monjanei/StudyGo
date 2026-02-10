@@ -1568,3 +1568,107 @@ func main() {
     }
 }
 ```
+
+## day14
+
+### 1.线程安全
+
+定义两个函数使用协程并发去操作同一个对象，以下方代码为例，sum的值会“随机”
+
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+var sum int
+var wait sync.WaitGroup
+
+func add() {
+    for i := 0; i < 100000; i++ {
+       sum++
+    }
+    wait.Done()
+}
+func sub() {
+    for i := 0; i < 100000; i++ {
+       sum--
+    }
+    wait.Done()
+}
+
+func main() {
+    wait.Add(2)
+    go add()
+    go sub()
+    wait.Wait()
+    fmt.Println(sum)
+}
+```
+
+此时就需要某个函数操作这个数的时候就需要去上锁
+
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+var sum int
+var wait sync.WaitGroup
+var lock sync.Mutex
+
+func add() {
+    lock.Lock()
+    for i := 0; i < 100000; i++ {
+       sum++
+    }
+    lock.Unlock()
+    wait.Done()
+}
+func sub() {
+    lock.Lock()
+    for i := 0; i < 100000; i++ {
+       sum--
+    }
+    lock.Unlock()
+    wait.Done()
+}
+
+func main() {
+    wait.Add(2)
+    go add()
+    go sub()
+    wait.Wait()
+    fmt.Println(sum)
+}
+```
+
+定义一个map，一个函数循环去读取，一个函数循环写入，此时会报错`fatal error: concurrent map read and map write`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var maps = map[int]string{}
+    go func() {
+       for {
+          maps[1] = "alen"
+       }
+    }()
+    go func() {
+       for {
+          fmt.Println(maps[1])
+       }
+    }()
+    select {}
+}
+```
+
+使用以下方式去定义
